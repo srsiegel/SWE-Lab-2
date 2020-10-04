@@ -65,7 +65,17 @@ const jsonToMongo = () => {
     Remember that we needed to read in a file like we did in Bootcamp Assignment #1.
    */
 
-    readJsonFile("schools");
+    var clubs = readJsonFile("schools");
+    clubs.forEach(element => {
+      var club = new FootballClub({
+        school: element.school,
+        mascot: element.mascot,
+        color: element.color,
+        conference: element.conference,
+        search: element.search
+      });
+      club.save();
+    });
 
     //delete the existing entries to start fresh
     await deleteDataInDB();
