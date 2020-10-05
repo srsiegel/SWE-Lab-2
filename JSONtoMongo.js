@@ -2,8 +2,10 @@
 /* 
   Import modules/files you may need to correctly run the script. 
  */
+//import { connectToDatabase } from "../connectMongodb.js";
 import { readJsonFile } from "./readFile.js";
 import FootballClub from "./footballClubModel.js";
+import { Model, Mongoose } from "mongoose";
 
 const count = async () => {
   // This prints the count to the console
@@ -40,18 +42,21 @@ const saveDataInDB = async (footballClub) => {
      * you can use insertMany (read more from here https://mongoosejs.com/docs/api.html#model_Model.insertMany)
      */
 
-    FootballClub.insertMany(footballClub, function (res, rej) {
-      if (err) {
-        reject(err);
-      } else {
-        FootballClub.close();
-      }
+    //   foot.forEach((element) => {
+    //     FootballClub.model('name', footballClub);
+    // });
+
+    FootballClub.insertMany(footballClub, async (err, docs) => {
+      if (err) reject(err);
+      resolve(docs);
     });
   });
 };
 
 const deleteDataInDB = async () => {
-  FootballClub.remove({});
+  return await FootballClub.deleteMany((err) => {
+    if (err) throw err;
+  });
 };
 
 const jsonToMongo = () => {
@@ -65,17 +70,9 @@ const jsonToMongo = () => {
     Remember that we needed to read in a file like we did in Bootcamp Assignment #1.
    */
 
-    var clubs = readJsonFile("schools");
-    clubs.forEach(element => {
-      var club = new FootballClub({
-        school: element.school,
-        mascot: element.mascot,
-        color: element.color,
-        conference: element.conference,
-        search: element.search
-      });
-      club.save();
-    });
+    //var MyModel = Mongoose.Model("test", FootballClub);
+    //var clubs = readJsonFile("schools");
+    //readJsonFile(clubs);
 
     //delete the existing entries to start fresh
     await deleteDataInDB();

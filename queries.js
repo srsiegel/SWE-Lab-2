@@ -21,18 +21,28 @@ const findFootballClubBySchoolName = (_schoolName_) => {
       Find the document that contains data corresponding to the school name,
       then pass the returned data into the res function.
      */
-    
+    FootballClub.findById(_schoolName_, function (err, data) {
+      if (err) {
+        rej(err);
+      } else {
+        res(data);
+      }
+    });
   });
 };
 const deleteFootballClubByMascot = (_mascot_) => {
-  
   const done = true;
   return new Promise((res, rej) => {
     /*
      Find the document with the specified mascot provided in parameter. Go ahead and remove this football Club from your database and pass the variable, "done", into the res function.
      */
-
-    
+    FootballClub.findById(_mascot_, function (err, data) {
+      if (err) {
+        rej(err);
+      } else {
+        res(data);
+      }
+    });
   });
 };
 const updateSchool = (_schoolName_, _new_data_) => {
@@ -45,7 +55,16 @@ const updateSchool = (_schoolName_, _new_data_) => {
     const color = _new_data_.color;
     const conference = _new_data_.conference;
     const search = _new_data_.search;
-    
+
+    FootballClub.findByIdAndUpdate(
+      _schoolName_,
+      { mascot: mascot, color: color, conference: conference, search: search },
+      function (err, data) {
+        if (err) {
+          rej(err);
+        } else res(data);
+      }
+    );
   });
 };
 
@@ -56,7 +75,13 @@ const findFootballClubByTags = (_tags_) => {
      * the _tags_ in the parameter is a list of tags, use that to find the football club, then
      * pass the returned data into the res function.
      */
-    
+    FootballClub.find({ search: _tags_ }, function (err, data) {
+      if (err) {
+        rej(err);
+      } else {
+        res(data);
+      }
+    });
   });
 };
 
@@ -66,10 +91,15 @@ const retrieveAllFootballClubs = () => {
       Retrieve all the Football Clubs in the database, and then
      * pass the returned data array into the res function.
      */
-    
+    FootballClub.find({}, function (err, data) {
+      if (err) {
+        rej(err);
+      } else {
+        res(data);
+      }
+    });
   });
 };
-
 
 const DisplayFormattedData = (data) => {
   if (data) {
@@ -77,7 +107,7 @@ const DisplayFormattedData = (data) => {
      * write code here to format your data to look exactly like what was provided in the Readme
      * then log it
      */
-    
+    console.log(data.pretty());
   } else {
     console.log("Data not found or has been removed!\n");
   }
